@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  sqlserver:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    environment:
+      SA_PASSWORD: Your_password123
+      ACCEPT_EULA: 1
+      MSSQL_PID: Developer
+    volumes:
+      - ./db:/var/opt/mssql/data
+    ports:
+      - "1433:1433"
+    networks:
+      - adquisiciones_net
+    
+  adquisicionesapi:
+    build:
+      context: ./AdquisicionesAPI
+      dockerfile: Dockerfile
+    ports:
+      - "3000:8080"
+    environment:
+      - ConnectionStrings__AdquisicionDB=Server=sqlserver;Database=AdquisicionesDB;User Id=sa;Password=Your_password123;TrustServerCertificate=true;
+    depends_on:
+      - sqlserver
+    networks:
+      - adquisiciones_net
+      
+  adquisicionesweb:
+    build:
+      context: ./AdquisicionesWEB
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"
+    depends_on:
+      - adquisicionesapi
+    networks:
+      - adquisiciones_net
+
+networks:
+  adquisiciones_net:
+    driver: bridge

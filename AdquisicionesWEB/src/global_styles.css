@@ -1,0 +1,32 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --color-primary: #283959;
+  --color-secondary: #5A7CBF;
+  --color-accent: #8DF2F2;
+  --color-highlight: #04D9B2;
+  --color-background: #F2F2F2;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  color: var(--color-primary);
+  background-color: var(--color-background);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 0.5rem;
+  color: var(--color-primary);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}

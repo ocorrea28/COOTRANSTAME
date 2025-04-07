@@ -1,0 +1,10 @@
+@AdquisicionesAPI_HostAddress = http://localhost:3000
+
+
+
+
+POST {{AdquisicionesAPI_HostAddress}}/api/DocumentosAdquisicion/Simple
+Content-Type: application/json
+
+{"adquisicionID":"23","tipoDocumento":"Factura","numeroDocumento":"1","fechaDocumento":"2025-04-07T03:12:19.489Z","archivo":"https://freeloz.com/qr-code/"}
+

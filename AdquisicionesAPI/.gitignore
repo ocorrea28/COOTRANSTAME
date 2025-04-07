@@ -1,0 +1,38 @@
+# Directorios de compilación
+bin/
+obj/
+
+# Archivos de usuario y IDE
+*.user
+*.userosscache
+*.suo
+*.userprefs
+.vs/
+.vscode/
+*.rsuser
+
+# Archivos de caché y compilación
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Archivos locales
+appsettings.Development.json
+appsettings.*.json
+!appsettings.json
+
+# Archivos de prueba
+TestResults/
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# Archivos temporales de .NET Core
+.dotnet/
+*.dll
+*.exe
+*.pdb
+
+# Archivos locales de configuración SQL Server
+*.mdf
+*.ldf
+*.ndf
