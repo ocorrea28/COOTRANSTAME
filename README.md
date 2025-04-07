@@ -53,7 +53,7 @@ Deberías ver los siguientes servicios:
 Una vez que todos los contenedores estén en ejecución:
 
 - **Frontend**: http://localhost:4200
-- **API**: http://localhost:5000/swagger
+- **API**: http://localhost:3000/swagger
 
 ## Detalles de los Contenedores
 
@@ -65,7 +65,7 @@ Una vez que todos los contenedores estén en ejecución:
 
 ### Backend (AdquisicionesAPI)
 
-- **Puerto**: 5000
+- **Puerto**: 3000
 - **Tecnología**: .NET 8
 - **Endpoints principales**:
   - `/api/adquisiciones`
@@ -129,7 +129,7 @@ DB_PASSWORD=AdresPassword123!
 DB_NAME=AdquisicionesDB
 
 # Configuración de API
-API_PORT=5000
+API_PORT=3000
 
 # Configuración Web
 WEB_PORT=4200

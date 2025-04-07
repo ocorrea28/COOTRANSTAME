@@ -25,7 +25,7 @@ services:
       - sqlserver
     networks:
       - adquisiciones_net
-      
+    
   adquisicionesweb:
     build:
       context: ./AdquisicionesWEB
