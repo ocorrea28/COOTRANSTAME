@@ -26,7 +26,7 @@ RUN rm -rf /etc/nginx/conf.d/*
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copiar los archivos de la aplicación compilada desde la etapa de build
-COPY --from=build /app/dist/demo/browser/ /usr/share/nginx/html/
+COPY --from=build /app/dist/cootranstame-web/browser/ /usr/share/nginx/html/
 
 # Exponer el puerto 80
 EXPOSE 80

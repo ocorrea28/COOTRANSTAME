@@ -1,96 +1,169 @@
-# Sistema de Adquisiciones ADRES (Frontend)
+# Sistema de Gestión de Rutas COOTRANSTAME (Frontend)
 
-Este proyecto contiene el frontend desarrollado en Angular para el Sistema de Gestión de Adquisiciones de ADRES.
+Este proyecto contiene el frontend desarrollado en Angular para el Sistema de Gestión de Rutas de COOTRANSTAME.
 
-## Características
+## 🚛 Descripción
 
-- Interfaz de usuario completa para gestionar adquisiciones, proveedores, unidades administrativas y documentos
-- Diseño responsivo con Bootstrap y CSS personalizado
-- Componentes reutilizables (tablas, botones, modales)
-- Filtrado y búsqueda de información
-- Validaciones de formularios
-- Navegación entre componentes mediante Angular Router
+Aplicación web moderna desarrollada en Angular 17+ que proporciona una interfaz intuitiva y profesional para la gestión de rutas de transporte de carga y pasajeros para COOTRANSTAME.
 
-## Estructura del Proyecto
+### Funcionalidades principales:
+- **Gestión de Rutas**: Interfaz completa para CRUD de rutas
+- **Validaciones en Tiempo Real**: Sistema avanzado de validación
+- **Diseño Profesional**: UI moderna con colores corporativos de COOTRANSTAME
+- **Responsive**: Adaptable a dispositivos móviles y desktop
+- **Iconografía de Transporte**: Elementos visuales temáticos
 
-- **src/app/core**: Modelos de datos y repositorios para comunicación con API
-- **src/app/features**: Componentes específicos para cada entidad del sistema
-- **src/app/shared**: Componentes compartidos y utilitarios
-- **src/app/layout**: Componentes de estructura general (header, footer, etc.)
+## 🏗️ Tecnologías
 
-## Requisitos de Desarrollo
+- **Angular 17+**: Framework principal
+- **TypeScript**: Lenguaje de programación
+- **CSS3**: Estilos personalizados
+- **RxJS**: Programación reactiva
+- **Angular Forms**: Manejo de formularios
+- **Docker**: Contenedorización con Nginx
 
-- Node.js (versión 18 o superior)
-- Angular CLI (versión 17 o superior)
-- NPM (versión 9 o superior)
+## 🚀 Configuración
 
-## Ejecución en Entorno Local
+### Prerrequisitos
+- Node.js 18+
+- npm o yarn
+- Angular CLI
 
-### Instalación de Dependencias
-
+### Instalación local
 ```bash
+# Instalar dependencias
 npm install
-```
 
-### Servidor de Desarrollo
-
-```bash
+# Ejecutar en modo desarrollo
 ng serve
-```
 
-El servidor de desarrollo se iniciará en `http://localhost:4200/`.
-
-## Construcción para Producción
-
-```bash
+# Construir para producción
 ng build --configuration production
 ```
 
-Los archivos compilados estarán en el directorio `dist/`.
+## 📁 Estructura del Proyecto
 
-## Ejecución con Docker
-
-### Construcción de la Imagen
-
-```bash
-docker build -t adquisiciones-web .
+```
+src/
+├── app/
+│   ├── features/
+│   │   └── rutas/           # Módulo de rutas
+│   │       ├── components/  # Componentes de rutas
+│   │       ├── models/      # Modelos TypeScript
+│   │       └── services/    # Servicios HTTP
+│   │
+│   ├── shared/              # Componentes compartidos
+│   └── app.component.ts     # Componente principal
+├── assets/                  # Recursos estáticos
+└── environments/            # Configuraciones de entorno
 ```
 
-### Ejecución del Contenedor
+## 🎨 Características de UI
 
-```bash
-docker run -d -p 4200:80 --name adquisiciones-web adquisiciones-web
+### Diseño COOTRANSTAME
+- **Colores corporativos**: Azul profesional y dorado elegante
+- **Gradientes**: Efectos visuales modernos
+- **Glassmorphism**: Efectos de cristal en elementos
+- **Iconografía**: Emojis temáticos de transporte (🚛, 🚌, 🛣️)
+
+### Componentes principales
+- **Hero Section**: Sección principal con estadísticas
+- **Panel Informativo**: Guías y recomendaciones
+- **Formulario Avanzado**: Validaciones en tiempo real
+- **Tabla Profesional**: Lista de rutas con filtros
+- **Alertas Inteligentes**: Notificaciones contextuales
+
+## 🔧 Validaciones
+
+### Sistema de validación
+- **Campos requeridos**: Asteriscos rojos (*)
+- **Formato de texto**: Solo letras y espacios
+- **Duración**: Rango 0.5-48 horas
+- **Lógica de negocio**: Origen ≠ destino
+- **Detección de duplicados**: Alertas de rutas similares
+
+### Estados de validación
+- ❌ **Error**: Campos inválidos
+- ⚠️ **Advertencia**: Situaciones especiales
+- 💡 **Ayuda**: Tooltips informativos
+- ✅ **Éxito**: Validación correcta
+
+## 🐳 Docker
+
+### Dockerfile
+```dockerfile
+FROM node:18-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install --force
+COPY . .
+RUN npm run build -- --configuration production
+
+FROM nginx:alpine
+RUN rm -rf /etc/nginx/conf.d/*
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist/demo/browser/ /usr/share/nginx/html/
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
 ```
 
-La aplicación estará disponible en `http://localhost:4200/`.
-
-## Ejecución con Docker Compose
-
-Este proyecto puede ejecutarse de forma integrada con el backend utilizando Docker Compose.
-Para más detalles consulte el archivo `README.md` en la raíz del proyecto.
-
+### Construcción
 ```bash
-# Desde la raíz del proyecto (carpeta padre)
-docker-compose up -d
+# Construir imagen
+docker build -t cootranstame-web .
+
+# Ejecutar contenedor
+docker run -p 4200:80 cootranstame-web
 ```
 
-## Principales Componentes
+## 🛠️ Desarrollo
 
-- **AdquisicionListComponent**: Listado y gestión de adquisiciones
-- **ProveedorListComponent**: Listado y gestión de proveedores
-- **UnidadAdministrativaListComponent**: Listado y gestión de unidades administrativas
-- **DocumentoAdquisicionListComponent**: Listado y gestión de documentos de adquisición
-- **HistorialAdquisicionListComponent**: Historial de cambios de adquisiciones
+### Comandos útiles
+```bash
+# Servidor de desarrollo
+ng serve --open
 
-## Configuración de Entorno
+# Construcción de producción
+ng build --configuration production
 
-Los archivos de configuración de entorno se encuentran en:
+# Ejecutar tests
+ng test
 
-- `src/environments/environment.ts` (desarrollo)
-- `src/environments/environment.prod.ts` (producción)
+# Linting
+ng lint
 
-Aquí se configuran las URLs de API y otras variables de entorno.
+# Generar componente
+ng generate component nombre-componente
+```
 
-## Contacto y Soporte
+### Configuración de entornos
+```typescript
+// environments/environment.ts
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:3000/api'
+};
 
-Para problemas o consultas sobre este proyecto, contacte con el equipo de desarrollo de ADRES.
+// environments/environment.prod.ts
+export const environment = {
+  production: true,
+  apiUrl: '/api'
+};
+```
+
+## 📱 Responsive Design
+
+### Breakpoints
+- **Mobile**: < 768px
+- **Tablet**: 768px - 1024px
+- **Desktop**: > 1024px
+
+### Adaptaciones móviles
+- Navegación colapsible
+- Formularios apilados
+- Tablas con scroll horizontal
+- Botones de tamaño táctil
+
+## 📄 Licencia
+
+Para problemas o consultas sobre este proyecto, contacte con el equipo de desarrollo de COOTRANSTAME.

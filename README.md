@@ -1,174 +1,150 @@
-# Sistema de Adquisiciones ADRES
+# Sistema de Gestión de Rutas COOTRANSTAME
 
-Este repositorio contiene el Sistema de Gestión de Adquisiciones de ADRES, una aplicación completa para gestionar adquisiciones, proveedores, unidades administrativas, documentos y más.
+Este repositorio contiene el Sistema de Gestión de Rutas de COOTRANSTAME, una aplicación completa para gestionar rutas de transporte de carga y pasajeros.
 
-## Estructura del Proyecto
+## 🚛 Descripción
 
-El proyecto está estructurado en dos componentes principales:
+Sistema web desarrollado para COOTRANSTAME que permite:
 
-- **AdquisicionesAPI**: Backend desarrollado en .NET que proporciona los servicios REST.
-- **AdquisicionesWEB**: Frontend desarrollado en Angular que proporciona la interfaz de usuario.
+- **Gestión de Rutas**: Registro, edición y eliminación de rutas de transporte
+- **Tipos de Servicio**: Manejo de rutas para carga y pasajeros
+- **Validaciones Avanzadas**: Sistema completo de validación de datos
+- **Interfaz Moderna**: Diseño profesional y responsivo
+- **Base de Datos**: Almacenamiento seguro con SQL Server
 
-## Requisitos Previos
+## 🏗️ Arquitectura
 
-Para ejecutar este proyecto necesitarás:
+- **Frontend**: Angular 17+ con diseño moderno
+- **Backend**: .NET 8 Web API
+- **Base de Datos**: SQL Server (Azure SQL Edge)
+- **Contenedores**: Docker y Docker Compose
 
-- [Docker](https://www.docker.com/products/docker-desktop/) (versión 20.10 o superior)
-- [Docker Compose](https://docs.docker.com/compose/install/) (versión 2.0 o superior)
-- Al menos 4GB de RAM disponible para Docker
-- Espacio en disco: aproximadamente 2GB
+## 🚀 Instalación y Configuración
 
-## Ejecutar el Proyecto con Docker Compose
+### Prerrequisitos
 
-### 1. Clonar el Repositorio
+- Docker y Docker Compose
+- Git
 
+### Instalación
+
+1. **Clonar el repositorio**:
 ```bash
-git clone https://github.com/ocorrea28/Adres.git
-cd Adres
+git clone https://github.com/ocorrea28/COOTRANSTAME.git
+cd COOTRANSTAME
 ```
 
-### 2. Iniciar los Contenedores
-
-Desde la raíz del proyecto, ejecuta:
-
+2. **Ejecutar con Docker Compose**:
 ```bash
-docker-compose up -d
+docker compose up -d --build
 ```
 
-Este comando construirá las imágenes necesarias (si no existen) e iniciará todos los servicios definidos en el archivo `docker-compose.yml`.
+3. **Acceder a la aplicación**:
+   - Frontend: http://localhost:4200
+   - API: http://localhost:3000
 
-### 3. Verificar que los Contenedores están Funcionando
+## 🔧 Configuración de Base de Datos
 
-```bash
-docker-compose ps
-```
+### Credenciales por defecto
 
-Deberías ver los siguientes servicios:
-- `adquisiciones-api` - Backend API
-- `adquisiciones-web` - Frontend Angular
-- `adquisiciones-db` - Base de datos SQL Server
-
-### 4. Acceder a la Aplicación
-
-Una vez que todos los contenedores estén en ejecución:
-
-- **Frontend**: http://localhost:4200
-- **API**: http://localhost:3000/swagger
-
-## Detalles de los Contenedores
-
-### Frontend (AdquisicionesWEB)
-
-- **Puerto**: 4200
-- **Tecnología**: Angular 19
-- **Entorno**: Node.js 20
-
-### Backend (AdquisicionesAPI)
-
-- **Puerto**: 3000
-- **Tecnología**: .NET 8
-- **Endpoints principales**:
-  - `/api/adquisiciones`
-  - `/api/proveedores`
-  - `/api/unidades-administrativas`
-  - `/api/documentos-adquisicion`
-  - `/api/historial-adquisiciones`
-
-### Base de Datos (SQL Server)
-
-- **Puerto**: 1433
-- **Usuario por defecto**: sa
-- **Contraseña por defecto**: AdresPassword123!
+- **Usuario**: sa
+- **Contraseña por defecto**: CootranstamePassword123!
 - **Base de datos**: AdquisicionesDB
+- **Puerto**: 1433
 
-## Comandos Útiles
+### Migración inicial
 
-### Ver Logs
+La base de datos se crea automáticamente al iniciar la aplicación. Las migraciones se ejecutan automáticamente.
 
-```bash
-# Ver logs de todos los servicios
-docker-compose logs
+## 📁 Estructura del Proyecto
 
-# Ver logs de un servicio específico
-docker-compose logs adquisiciones-web
-docker-compose logs adquisiciones-api
+```
+COOTRANSTAME/
+├── AdquisicionesAPI/          # Backend .NET
+│   ├── Controllers/           # Controladores API
+│   ├── Models/               # Modelos de datos
+│   ├── Data/                 # Contexto de base de datos
+│   └── Migrations/           # Migraciones EF Core
+├── AdquisicionesWEB/         # Frontend Angular
+│   ├── src/app/             # Aplicación Angular
+│   ├── src/app/features/    # Módulos por funcionalidad
+│   └── src/app/shared/      # Componentes compartidos
+├── docker-compose.yml        # Configuración Docker
+└── README.md                # Este archivo
 ```
 
-### Detener los Contenedores
+## 🐳 Docker
 
-```bash
-# Detener pero no eliminar los contenedores
-docker-compose stop
+### Servicios
 
-# Detener y eliminar los contenedores
-docker-compose down
+- **sqlserver**: Base de datos SQL Server
+- **adquisicionesapi**: API Backend (.NET)
+- **adquisicionesweb**: Frontend (Angular + Nginx)
 
-# Detener, eliminar contenedores y volúmenes (¡borra la base de datos!)
-docker-compose down -v
-```
+### Variables de entorno
 
-### Reconstruir las Imágenes
+```env
+# Base de datos
+SA_PASSWORD=Your_password123
+ACCEPT_EULA=1
+MSSQL_PID=Developer
 
-Si realizas cambios en el código fuente y necesitas reconstruir las imágenes:
+# API
+ConnectionStrings__AdquisicionDB=Server=sqlserver;Database=AdquisicionesDB;User Id=sa;Password=Your_password123;TrustServerCertificate=true;
 
-```bash
-docker-compose build
-# o para un servicio específico
-docker-compose build adquisiciones-web
-```
-
-## Variables de Entorno
-
-Las variables de entorno se definen en el archivo `.env` (crear si no existe) en la raíz del proyecto.
-
-Ejemplo:
-```
-# Configuración de la Base de Datos
-DB_USER=sa
-DB_PASSWORD=AdresPassword123!
+# Para desarrollo local
+DB_SERVER=localhost
 DB_NAME=AdquisicionesDB
-
-# Configuración de API
-API_PORT=3000
-
-# Configuración Web
-WEB_PORT=4200
+DB_USER=sa
+DB_PASSWORD=CootranstamePassword123!
 ```
 
-## Solución de Problemas
+## 🔍 Funcionalidades
 
-### Problemas de Conexión a la Base de Datos
+### Gestión de Rutas
+- ✅ Registro de nuevas rutas
+- ✅ Edición de rutas existentes
+- ✅ Eliminación de rutas
+- ✅ Filtrado por tipo de servicio
+- ✅ Validaciones en tiempo real
 
-Si el API no puede conectarse a la base de datos:
+### Validaciones
+- ✅ Campos requeridos
+- ✅ Formato de ciudades
+- ✅ Duración de rutas
+- ✅ Detección de duplicados
+- ✅ Ciudades origen ≠ destino
 
-1. Verifica que el contenedor de SQL Server esté en ejecución:
-   ```bash
-   docker-compose ps adquisiciones-db
-   ```
+### Interfaz de Usuario
+- ✅ Diseño profesional COOTRANSTAME
+- ✅ Responsive design
+- ✅ Iconografía de transporte
+- ✅ Alertas y notificaciones
+- ✅ Estados de carga
 
-2. Verifica los logs de la base de datos:
-   ```bash
-   docker-compose logs adquisiciones-db
-   ```
+## 🛠️ Desarrollo
 
-3. Asegúrate de que la cadena de conexión sea correcta en el archivo `appsettings.json` del API.
+### Comandos útiles
 
-### El Frontend no Puede Comunicarse con el API
+```bash
+# Levantar servicios
+docker compose up -d
 
-1. Verifica que ambos contenedores estén funcionando:
-   ```bash
-   docker-compose ps
-   ```
+# Ver logs
+docker compose logs -f
 
-2. Verifica que la URL del API configurada en el entorno de Angular sea correcta.
+# Reconstruir servicios
+docker compose up -d --build
 
-## Desarrollo Local
+# Parar servicios
+docker compose down
 
-Para desarrollo local sin Docker, consulta los README específicos en las carpetas:
-- `/AdquisicionesAPI/README.md`
-- `/AdquisicionesWEB/README.md`
+# Limpiar volúmenes
+docker compose down -v
+```
 
-## Licencia
+## 📄 Licencia
 
-Este proyecto es propiedad de ADRES y está destinado únicamente para uso interno.
-# Adres
+Este proyecto es propiedad de COOTRANSTAME y está destinado únicamente para uso interno.
+
+# COOTRANSTAME

@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   template: `
     <div class="page-container">
       <div class="app-logo-container">
-        <img src="https://www.adres.gov.co/PublishingImages/Header%20Logos/logo-adres.png" alt="Logo ADRES" class="app-logo">
+       
       </div>
       <div class="page-header">
         <h2 class="page-title">{{ title }}</h2>

@@ -5,7 +5,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "demo": {
+    "cootranstame-web": {
       "architect": {
         "build": {
           "builder": "@angular/build:application",
@@ -35,7 +35,7 @@
             "assets": [],
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "outputPath": "dist/demo",
+            "outputPath": "dist/cootranstame-web",
             "polyfills": [
               "zone.js"
             ],
@@ -50,10 +50,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "development": {
-              "buildTarget": "demo:build:development"
+              "buildTarget": "cootranstame-web:build:development"
             },
             "production": {
-              "buildTarget": "demo:build:production"
+              "buildTarget": "cootranstame-web:build:production"
             }
           },
           "defaultConfiguration": "development"

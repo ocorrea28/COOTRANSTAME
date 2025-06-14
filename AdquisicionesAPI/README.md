@@ -1,114 +1,143 @@
-# Sistema de Adquisiciones ADRES (Backend)
+# Sistema de Gestión de Rutas COOTRANSTAME (Backend)
 
-Este proyecto contiene el backend desarrollado en .NET para el Sistema de Gestión de Adquisiciones de ADRES.
+Este proyecto contiene el backend desarrollado en .NET para el Sistema de Gestión de Rutas de COOTRANSTAME.
 
-## Características
+## 🚛 Descripción
 
-- API RESTful para gestión de adquisiciones, proveedores, unidades administrativas y documentos
-- Arquitectura en capas (Controladores, Servicios, Repositorios, Modelos)
-- Base de datos SQL Server con Entity Framework Core
-- Autenticación y autorización
-- Documentación de API con Swagger
-- Logs y manejo de excepciones
+API REST desarrollada en .NET 8 que proporciona servicios para la gestión de rutas de transporte de carga y pasajeros para COOTRANSTAME.
 
-## Estructura del Proyecto
+### Funcionalidades principales:
+- **Gestión de Rutas**: CRUD completo para rutas de transporte
+- **Validaciones**: Sistema robusto de validación de datos
+- **Base de Datos**: Integración con SQL Server usando Entity Framework Core
+- **Documentación**: Swagger/OpenAPI integrado
 
-- **AdquisicionesAPI**: Proyecto principal de API
-  - **Controllers**: Controladores REST para cada entidad
-  - **Models**: Modelos de datos y DTOs
-  - **Services**: Lógica de negocio
-  - **Repositories**: Acceso a datos
-  - **Middleware**: Componentes de middleware personalizados
-  - **Extensions**: Métodos de extensión para configuración
+## 🏗️ Tecnologías
 
-## Requisitos de Desarrollo
+- **.NET 8**: Framework principal
+- **Entity Framework Core**: ORM para base de datos
+- **SQL Server**: Base de datos
+- **Swagger**: Documentación de API
+- **Docker**: Contenedorización
 
+## 🚀 Configuración
+
+### Prerrequisitos
 - .NET 8 SDK
-- SQL Server (o SQL Server Express)
-- Visual Studio 2022 o Visual Studio Code
+- SQL Server (o Docker)
 
-## Ejecución en Entorno Local
-
-### Configuración de Base de Datos
-
-1. Actualiza la cadena de conexión en `appsettings.json`:
-
-```json
-"ConnectionStrings": {
-  "AdquisicionDB": "Server=localhost;Database=AdquisicionesDB;User Id=sa;Password=YourPassword;TrustServerCertificate=true;"
-}
+### Variables de entorno
+```bash
+ConnectionStrings__AdquisicionDB="Server=localhost;Database=AdquisicionesDB;User Id=sa;Password=CootranstamePassword123!;TrustServerCertificate=true;"
 ```
 
-2. Ejecuta las migraciones para crear la base de datos:
-
+### Instalación local
 ```bash
+# Restaurar paquetes
+dotnet restore
+
+# Aplicar migraciones
 dotnet ef database update
-```
 
-### Ejecución del Proyecto
-
-```bash
+# Ejecutar aplicación
 dotnet run
 ```
 
-La API estará disponible en `https://localhost:5001` y `http://localhost:5000`.
+## 📋 Endpoints
 
-## Endpoints Principales
+### Rutas
+- `GET /api/rutas` - Obtener todas las rutas
+- `GET /api/rutas/{id}` - Obtener ruta por ID
+- `POST /api/rutas` - Crear nueva ruta
+- `PUT /api/rutas/{id}` - Actualizar ruta
+- `DELETE /api/rutas/{id}` - Eliminar ruta
 
-- **GET /api/adquisiciones**: Obtener todas las adquisiciones
-- **GET /api/adquisiciones/{id}**: Obtener una adquisición por ID
-- **POST /api/adquisiciones**: Crear una nueva adquisición
-- **PUT /api/adquisiciones/{id}**: Actualizar una adquisición existente
-- **DELETE /api/adquisiciones/{id}**: Eliminar una adquisición
+### Documentación
+- `GET /swagger` - Documentación interactiva de la API
 
-Endpoints similares existen para:
-- `/api/proveedores`
-- `/api/unidades-administrativas`
-- `/api/documentos-adquisicion`
-- `/api/historial-adquisiciones`
+## 🗄️ Base de Datos
 
-## Documentación de API
-
-La documentación completa de la API está disponible en Swagger:
-- Entorno local: `http://localhost:5000/swagger`
-
-## Ejecución con Docker
-
-### Construcción de la Imagen
-
-```bash
-docker build -t adquisiciones-api .
+### Modelo de datos
+```sql
+Rutas:
+- Id (int, PK)
+- Origen (nvarchar(100))
+- Destino (nvarchar(100))
+- Duracion (decimal)
+- Tipo (nvarchar(50))
+- FechaCreacion (datetime2)
 ```
 
-### Ejecución del Contenedor
-
+### Migraciones
 ```bash
-docker run -d -p 5000:80 -e "ConnectionStrings__AdquisicionDB=Server=host.docker.internal;Database=AdquisicionesDB;User Id=sa;Password=YourPassword;TrustServerCertificate=true;" --name adquisiciones-api adquisiciones-api
+# Crear nueva migración
+dotnet ef migrations add NombreMigracion
+
+# Aplicar migraciones
+dotnet ef database update
+
+# Revertir migración
+dotnet ef database update MigracionAnterior
 ```
 
-La API estará disponible en `http://localhost:5000/`.
+## 🐳 Docker
 
-## Ejecución con Docker Compose
+### Dockerfile
+```dockerfile
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 8080
 
-Este proyecto puede ejecutarse de forma integrada con el frontend y la base de datos utilizando Docker Compose.
-Para más detalles consulte el archivo `README.md` en la raíz del proyecto.
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY *.csproj ./
+RUN dotnet restore
+COPY . .
+RUN dotnet build -c Release -o /app
 
-```bash
-# Desde la raíz del proyecto (carpeta padre)
-docker-compose up -d
+FROM build AS publish
+RUN dotnet publish -c Release -o /app
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app .
+ENTRYPOINT ["dotnet", "AdquisicionesAPI.dll"]
 ```
 
-## Desarrollo y Extensión
+### Construcción
+```bash
+# Construir imagen
+docker build -t cootranstame-api .
 
-### Agregar una Nueva Entidad
+# Ejecutar contenedor
+docker run -p 8080:8080 cootranstame-api
+```
 
-1. Crear el modelo en `Models`
-2. Agregar DbSet en `ApplicationDbContext`
-3. Crear la migración con `dotnet ef migrations add NombreMigracion`
-4. Crear el repositorio en `Repositories`
-5. Crear el servicio en `Services`
-6. Crear el controlador en `Controllers`
+## 🔧 Desarrollo
 
-## Contacto y Soporte
+### Estructura del proyecto
+```
+AdquisicionesAPI/
+├── Controllers/          # Controladores de API
+├── Models/              # Modelos de datos
+├── Data/                # Contexto de base de datos
+├── Migrations/          # Migraciones EF Core
+├── Program.cs           # Punto de entrada
+└── appsettings.json     # Configuración
+```
 
-Para problemas o consultas sobre este proyecto, contacte con el equipo de desarrollo de ADRES.
+### Comandos útiles
+```bash
+# Ejecutar en modo desarrollo
+dotnet run --environment Development
+
+# Ejecutar tests
+dotnet test
+
+# Generar documentación
+dotnet build --verbosity normal
+```
+
+## 📄 Licencia
+
+Para problemas o consultas sobre este proyecto, contacte con el equipo de desarrollo de COOTRANSTAME.
