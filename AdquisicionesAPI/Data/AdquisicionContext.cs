@@ -9,36 +9,22 @@ namespace AdquisicionesAPI.Data
         {
         }
 
-        public DbSet<Adquisicion> Adquisiciones { get; set; }
-        public DbSet<UnidadAdministrativa> UnidadesAdministrativas { get; set; }
-        public DbSet<Proveedor> Proveedores { get; set; }
-        public DbSet<HistorialAdquisicion> HistorialAdquisiciones { get; set; }
-        public DbSet<DocumentoAdquisicion> DocumentosAdquisicion { get; set; }
+        public DbSet<Ruta> Rutas { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configure relationships
-            modelBuilder.Entity<Adquisicion>()
-                .HasOne(a => a.UnidadAdministrativa)
-                .WithMany()
-                .HasForeignKey(a => a.UnidadID);
-
-            modelBuilder.Entity<Adquisicion>()
-                .HasOne(a => a.Proveedor)
-                .WithMany()
-                .HasForeignKey(a => a.ProveedorID);
-
-            modelBuilder.Entity<HistorialAdquisicion>()
-                .HasOne(h => h.Adquisicion)
-                .WithMany(a => a.Historial)
-                .HasForeignKey(h => h.AdquisicionID);
-
-            modelBuilder.Entity<DocumentoAdquisicion>()
-                .HasOne(d => d.Adquisicion)
-                .WithMany(a => a.Documentos)
-                .HasForeignKey(d => d.AdquisicionID);
+            // Configuración para la tabla Rutas
+            modelBuilder.Entity<Ruta>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Origen).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Destino).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Duracion).IsRequired();
+                entity.Property(e => e.Tipo).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.FechaCreacion).HasDefaultValueSql("GETDATE()");
+            });
         }
     }
 }
